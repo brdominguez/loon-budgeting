@@ -24,6 +24,10 @@ export function getCategoryPaycheck(category: BucketCategory): PaycheckType {
 		case 'savings':
 		case 'buffer':
 			return 'end-of-month';
+		default:
+			// Exhaustive check - if we add a new category, TypeScript will error here
+			const _exhaustiveCheck: never = category;
+			return _exhaustiveCheck;
 	}
 }
 
@@ -41,6 +45,10 @@ export function getCategoryLabel(category: BucketCategory): string {
 			return 'Flexible Spending';
 		case 'buffer':
 			return 'Buffer';
+		default:
+			// Exhaustive check - if we add a new category, TypeScript will error here
+			const _exhaustiveCheck: never = category;
+			return _exhaustiveCheck;
 	}
 }
 
