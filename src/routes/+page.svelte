@@ -22,6 +22,7 @@
 
         let showAddBucket = false;
         let editingBucket: Bucket | null = null;
+        let mounted = false;
 
         // Form state for new/edit bucket
         let formName = '';
@@ -30,12 +31,22 @@
         let formCurrentAmount = 0;
         let formNotes = '';
 
-	onMount(() => {
-		const loaded = loadBudgetState();
-		if (loaded) {
-			state = loaded;
-		}
-	});
+        onMount(() => {
+                const loaded = loadBudgetState();
+                if (loaded) {
+                        state = loaded;
+                }
+
+                mounted = true;
+
+                return () => {
+                        document.body.style.overflow = '';
+                };
+        });
+
+        $: if (mounted) {
+                document.body.style.overflow = showAddBucket ? 'hidden' : '';
+        }
 
         // Reactive calculations
         let midMonthAllocated = 0;
