@@ -52,6 +52,14 @@ npm run dev
 
 4. Open your browser and navigate to `http://localhost:5173`
 
+### Running Tests
+
+Execute the unit test suite with coverage:
+
+```bash
+npm run test:coverage
+```
+
 ## 🏗️ Building for Production
 
 To create a production build:
