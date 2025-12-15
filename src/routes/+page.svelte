@@ -371,7 +371,7 @@
 {#if showAddBucket}
         <div
                 class="modal-overlay"
-                role="button"
+                
                 tabindex="0"
                 onclick={(event) => {
                         if (event.target === event.currentTarget) {
