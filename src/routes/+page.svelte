@@ -91,7 +91,7 @@
 
                 if (event.key === 'Escape') {
                         closeForm();
-                } else if (isOverlayTarget && (event.key === 'Enter' || event.key === ' ')) {
+                } else if (isOverlayTarget && (event.key === 'Enter')) {
                         event.preventDefault();
                         closeForm();
                 }
