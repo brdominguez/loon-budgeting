@@ -371,8 +371,8 @@
 {#if showAddBucket}
         <div
                 class="modal-overlay"
-                
-                tabindex="0"
+                role="presentation"
+                tabindex="-1"
                 onclick={(event) => {
                         if (event.target === event.currentTarget) {
                                 closeForm();
