@@ -245,24 +245,24 @@
                                 {#if midMonthBuckets.length > 0}
                                         <div class="bucket-group">
                                                 <h3 class="group-title mid-month-title">Mid-Month Buckets</h3>
-                                                <div class="buckets-list">
+                                                <div class="buckets-grid">
                                                         {#each midMonthBuckets as bucket (bucket.id)}
-                                                                <div class="bucket-row">
-                                                                        <div class="bucket-main">
+                                                                <div class="bucket-tile">
+                                                                        <div class="tile-header">
                                                                                 <div class="bucket-title">
                                                                                         <h4>{bucket.name}</h4>
                                                                                         <span class="bucket-category">{getCategoryLabel(bucket.category)}</span>
                                                                                 </div>
-                                                                                {#if bucket.notes}
-                                                                                        <div class="bucket-notes inline">{bucket.notes}</div>
-                                                                                {/if}
-                                                                        </div>
-                                                                        <div class="bucket-meta">
-                                                                                <span class="target-amount">Target {formatCurrency(bucket.targetAmount)}</span>
                                                                                 <div class="bucket-actions">
                                                                                         <button class="btn-icon" onclick={() => openEditBucket(bucket)} title="Edit">✏️</button>
                                                                                         <button class="btn-icon" onclick={() => deleteBucket(bucket.id)} title="Delete">🗑️</button>
                                                                                 </div>
+                                                                        </div>
+                                                                        <div class="tile-body">
+                                                                                <span class="target-amount">Target {formatCurrency(bucket.targetAmount)}</span>
+                                                                                {#if bucket.notes}
+                                                                                        <div class="bucket-notes inline">{bucket.notes}</div>
+                                                                                {/if}
                                                                         </div>
                                                                 </div>
                                                         {/each}
@@ -275,24 +275,24 @@
                                 {#if endMonthBuckets.length > 0}
                                         <div class="bucket-group">
                                                 <h3 class="group-title end-month-title">End-of-Month Buckets</h3>
-                                                <div class="buckets-list">
+                                                <div class="buckets-grid">
                                                         {#each endMonthBuckets as bucket (bucket.id)}
-                                                                <div class="bucket-row">
-                                                                        <div class="bucket-main">
+                                                                <div class="bucket-tile">
+                                                                        <div class="tile-header">
                                                                                 <div class="bucket-title">
                                                                                         <h4>{bucket.name}</h4>
                                                                                         <span class="bucket-category">{getCategoryLabel(bucket.category)}</span>
                                                                                 </div>
-                                                                                {#if bucket.notes}
-                                                                                        <div class="bucket-notes inline">{bucket.notes}</div>
-                                                                                {/if}
-                                                                        </div>
-                                                                        <div class="bucket-meta">
-                                                                                <span class="target-amount">Target {formatCurrency(bucket.targetAmount)}</span>
                                                                                 <div class="bucket-actions">
                                                                                         <button class="btn-icon" onclick={() => openEditBucket(bucket)} title="Edit">✏️</button>
                                                                                         <button class="btn-icon" onclick={() => deleteBucket(bucket.id)} title="Delete">🗑️</button>
                                                                                 </div>
+                                                                        </div>
+                                                                        <div class="tile-body">
+                                                                                <span class="target-amount">Target {formatCurrency(bucket.targetAmount)}</span>
+                                                                                {#if bucket.notes}
+                                                                                        <div class="bucket-notes inline">{bucket.notes}</div>
+                                                                                {/if}
                                                                         </div>
                                                                 </div>
                                                         {/each}
@@ -568,21 +568,21 @@
 		color: #2c5282;
 	}
 
-        .buckets-list {
-                display: flex;
-                flex-direction: column;
+        .buckets-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
                 gap: 0.75rem;
         }
 
-        .bucket-row {
-                display: grid;
-                grid-template-columns: 1fr auto;
-                align-items: center;
-                gap: 0.75rem;
-                padding: 0.85rem 1rem;
+        .bucket-tile {
+                display: flex;
+                flex-direction: column;
+                gap: 0.6rem;
+                padding: 0.9rem 1rem;
                 border: 1px solid #e0e0e0;
-                border-radius: 10px;
-                background: #fff;
+                border-radius: 12px;
+                background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
         }
 
         .bucket-title {
@@ -608,26 +608,30 @@
                 color: #4a5568;
         }
 
-        .bucket-main {
+        .tile-header {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 0.5rem;
+        }
+
+        .tile-body {
                 display: flex;
                 flex-direction: column;
                 gap: 0.35rem;
         }
 
-        .bucket-meta {
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
-        }
-
         .target-amount {
                 font-weight: 700;
                 color: #2d3748;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.25rem;
         }
 
         .bucket-actions {
-                display: flex;
-                gap: 0.35rem;
+                display: inline-flex;
+                gap: 0.25rem;
         }
 
         .bucket-notes {
@@ -769,18 +773,18 @@
 	}
 
 	/* Responsive Design */
-	@media (max-width: 768px) {
-		main {
-			padding: 1rem 0.5rem;
-		}
+        @media (max-width: 768px) {
+                main {
+                        padding: 1rem 0.5rem;
+                }
 
-		.container {
-			padding: 1.5rem;
-		}
+                .container {
+                        padding: 1.5rem;
+                }
 
-		header h1 {
-			font-size: 2rem;
-		}
+                header h1 {
+                        font-size: 2rem;
+                }
 
                 .section-header {
                         flex-direction: column;
@@ -788,16 +792,12 @@
                         gap: 1rem;
                 }
 
-                .bucket-row {
-                        grid-template-columns: 1fr;
+                .buckets-grid {
+                        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
                 }
 
-                .bucket-meta {
-                        justify-content: space-between;
+                .modal {
+                        padding: 1.5rem;
                 }
-
-		.modal {
-			padding: 1.5rem;
-		}
-	}
+        }
 </style>
