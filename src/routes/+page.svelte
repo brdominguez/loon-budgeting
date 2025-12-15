@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import type { Bucket, BucketCategory, BudgetState } from '$lib/types';
-	import { loadBudgetState, saveBudgetState } from '$lib/storage';
+        import { onMount } from 'svelte';
+        import type { Bucket, BucketCategory, BudgetState } from '$lib/types';
+        import { loadBudgetState, saveBudgetState } from '$lib/storage';
 	import {
 		generateId,
 		formatCurrency,
@@ -13,22 +13,22 @@
 		getProgressPercentage
 	} from '$lib/utils';
 
-	let state = $state<BudgetState>({
-		buckets: [],
-		paychecks: [],
-		midMonthPaycheckAmount: 0,
-		endMonthPaycheckAmount: 0
-	});
+        let state: BudgetState = {
+                buckets: [],
+                paychecks: [],
+                midMonthPaycheckAmount: 0,
+                endMonthPaycheckAmount: 0
+        };
 
-	let showAddBucket = $state(false);
-	let editingBucket: Bucket | null = $state(null);
+        let showAddBucket = false;
+        let editingBucket: Bucket | null = null;
 
-	// Form state for new/edit bucket
-	let formName = $state('');
-	let formCategory = $state<BucketCategory>('flexible');
-	let formTargetAmount = $state(0);
-	let formCurrentAmount = $state(0);
-	let formNotes = $state('');
+        // Form state for new/edit bucket
+        let formName = '';
+        let formCategory: BucketCategory = 'flexible';
+        let formTargetAmount = 0;
+        let formCurrentAmount = 0;
+        let formNotes = '';
 
 	onMount(() => {
 		const loaded = loadBudgetState();
@@ -37,11 +37,16 @@
 		}
 	});
 
-	// Reactive calculations
-	let midMonthAllocated = $derived(calculateTotalAllocated(state.buckets, 'mid-month'));
-	let endMonthAllocated = $derived(calculateTotalAllocated(state.buckets, 'end-of-month'));
-	let midMonthRemaining = $derived(calculateRemaining(state.midMonthPaycheckAmount, midMonthAllocated));
-	let endMonthRemaining = $derived(calculateRemaining(state.endMonthPaycheckAmount, endMonthAllocated));
+        // Reactive calculations
+        let midMonthAllocated = 0;
+        let endMonthAllocated = 0;
+        let midMonthRemaining = 0;
+        let endMonthRemaining = 0;
+
+        $: midMonthAllocated = calculateTotalAllocated(state.buckets, 'mid-month');
+        $: endMonthAllocated = calculateTotalAllocated(state.buckets, 'end-of-month');
+        $: midMonthRemaining = calculateRemaining(state.midMonthPaycheckAmount, midMonthAllocated);
+        $: endMonthRemaining = calculateRemaining(state.endMonthPaycheckAmount, endMonthAllocated);
 
 	function saveState() {
 		saveBudgetState(state);
@@ -76,23 +81,34 @@
 		showAddBucket = true;
 	}
 
-	function closeForm() {
-		showAddBucket = false;
-		editingBucket = null;
-	}
+        function closeForm() {
+                showAddBucket = false;
+                editingBucket = null;
+        }
+
+        function handleOverlayKeydown(event: KeyboardEvent) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        closeForm();
+                } else if (event.key === 'Escape') {
+                        closeForm();
+                }
+        }
 
 	function saveBucket() {
 		if (!formName.trim()) return;
 
-		if (editingBucket) {
-			// Update existing bucket
-			const index = state.buckets.findIndex(b => b.id === editingBucket.id);
-			if (index !== -1) {
-				state.buckets[index] = {
-					...editingBucket,
-					name: formName.trim(),
-					category: formCategory,
-					targetAmount: formTargetAmount,
+        if (editingBucket) {
+                        const bucketToUpdate = editingBucket;
+
+                        // Update existing bucket
+                        const index = state.buckets.findIndex((b: Bucket) => b.id === bucketToUpdate.id);
+                        if (index !== -1) {
+                                state.buckets[index] = {
+                                        ...bucketToUpdate,
+                                        name: formName.trim(),
+                                        category: formCategory,
+                                        targetAmount: formTargetAmount,
 					currentAmount: formCurrentAmount,
 					notes: formNotes.trim() || undefined
 				};
@@ -116,13 +132,13 @@
 
 	function deleteBucket(bucketId: string) {
 		if (confirm('Are you sure you want to delete this bucket?')) {
-			state.buckets = state.buckets.filter(b => b.id !== bucketId);
+                        state.buckets = state.buckets.filter((b: Bucket) => b.id !== bucketId);
 			saveState();
 		}
 	}
 
 	function updateBucketAmount(bucketId: string, amount: number) {
-		const index = state.buckets.findIndex(b => b.id === bucketId);
+                const index = state.buckets.findIndex((b: Bucket) => b.id === bucketId);
 		if (index !== -1) {
 			state.buckets[index].currentAmount = amount;
 			saveState();
@@ -150,34 +166,36 @@
 		<section class="paycheck-config">
 			<h2>💰 Paycheck Amounts</h2>
 			<div class="paycheck-inputs">
-				<div class="paycheck-input">
-					<label>
-						<strong>Mid-Month Paycheck</strong>
-						<span class="hint">Covers: Late Bills + Flexible Spending</span>
-					</label>
-					<div class="input-group">
-						<span class="currency-symbol">$</span>
-						<input
-							type="number"
-							min="0"
-							step="0.01"
-							value={state.midMonthPaycheckAmount}
-							oninput={(e) => updatePaycheckAmount('mid-month', parseFloat(e.currentTarget.value) || 0)}
-						/>
-					</div>
-				</div>
-				<div class="paycheck-input">
-					<label>
-						<strong>End-of-Month Paycheck</strong>
-						<span class="hint">Covers: Early Bills + Groceries + Savings + Buffer</span>
-					</label>
-					<div class="input-group">
-						<span class="currency-symbol">$</span>
-						<input
-							type="number"
-							min="0"
-							step="0.01"
-							value={state.endMonthPaycheckAmount}
+                                <div class="paycheck-input">
+                                        <label for="mid-month-paycheck">
+                                                <strong>Mid-Month Paycheck</strong>
+                                                <span class="hint">Covers: Late Bills + Flexible Spending</span>
+                                        </label>
+                                        <div class="input-group">
+                                                <span class="currency-symbol">$</span>
+                                                <input
+                                                        id="mid-month-paycheck"
+                                                        type="number"
+                                                        min="0"
+                                                        step="0.01"
+                                                        value={state.midMonthPaycheckAmount}
+                                                        oninput={(e) => updatePaycheckAmount('mid-month', parseFloat(e.currentTarget.value) || 0)}
+                                                />
+                                        </div>
+                                </div>
+                                <div class="paycheck-input">
+                                        <label for="end-month-paycheck">
+                                                <strong>End-of-Month Paycheck</strong>
+                                                <span class="hint">Covers: Early Bills + Groceries + Savings + Buffer</span>
+                                        </label>
+                                        <div class="input-group">
+                                                <span class="currency-symbol">$</span>
+                                                <input
+                                                        id="end-month-paycheck"
+                                                        type="number"
+                                                        min="0"
+                                                        step="0.01"
+                                                        value={state.endMonthPaycheckAmount}
 							oninput={(e) => updatePaycheckAmount('end-of-month', parseFloat(e.currentTarget.value) || 0)}
 						/>
 					</div>
@@ -254,14 +272,15 @@
 										</div>
 									</div>
 									<div class="bucket-body">
-										<div class="amount-input">
-											<label>Current Amount:</label>
-											<div class="input-group">
-												<span class="currency-symbol">$</span>
-												<input
-													type="number"
-													min="0"
-													step="0.01"
+                                                                                <div class="amount-input">
+                                                                                        <label for={`mid-month-${bucket.id}-current`}>Current Amount:</label>
+                                                                                        <div class="input-group">
+                                                                                                <span class="currency-symbol">$</span>
+                                                                                                <input
+                                                                                                        id={`mid-month-${bucket.id}-current`}
+                                                                                                        type="number"
+                                                                                                        min="0"
+                                                                                                        step="0.01"
 													value={bucket.currentAmount}
 													oninput={(e) => updateBucketAmount(bucket.id, parseFloat(e.currentTarget.value) || 0)}
 												/>
@@ -308,14 +327,15 @@
 										</div>
 									</div>
 									<div class="bucket-body">
-										<div class="amount-input">
-											<label>Current Amount:</label>
-											<div class="input-group">
-												<span class="currency-symbol">$</span>
-												<input
-													type="number"
-													min="0"
-													step="0.01"
+                                                                                <div class="amount-input">
+                                                                                        <label for={`end-month-${bucket.id}-current`}>Current Amount:</label>
+                                                                                        <div class="input-group">
+                                                                                                <span class="currency-symbol">$</span>
+                                                                                                <input
+                                                                                                        id={`end-month-${bucket.id}-current`}
+                                                                                                        type="number"
+                                                                                                        min="0"
+                                                                                                        step="0.01"
 													value={bucket.currentAmount}
 													oninput={(e) => updateBucketAmount(bucket.id, parseFloat(e.currentTarget.value) || 0)}
 												/>
@@ -349,8 +369,18 @@
 
 <!-- Add/Edit Bucket Modal -->
 {#if showAddBucket}
-	<div class="modal-overlay" onclick={closeForm}>
-		<div class="modal" onclick={(e) => e.stopPropagation()}>
+        <div
+                class="modal-overlay"
+                role="button"
+                tabindex="0"
+                onclick={(event) => {
+                        if (event.target === event.currentTarget) {
+                                closeForm();
+                        }
+                }}
+                onkeydown={handleOverlayKeydown}
+        >
+                <div class="modal" role="dialog" aria-modal="true">
 			<h3>{editingBucket ? 'Edit Bucket' : 'Add New Bucket'}</h3>
 			<form onsubmit={(e) => { e.preventDefault(); saveBucket(); }}>
 				<div class="form-group">
