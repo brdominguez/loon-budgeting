@@ -6,9 +6,6 @@ on:
       - master
   workflow_dispatch:
 
-env:
-  BASE_PATH: ${{ vars.BASE_PATH }}
-
 permissions:
   contents: read
   pages: write
@@ -40,12 +37,14 @@ jobs:
         run: npm ci
 
       - name: Build static site
+        env:
+          BASE_PATH: '/${{ github.event.repository.name}}'
         run: npm run build
 
       - name: Upload build output
         uses: actions/upload-pages-artifact@v3
         with:
-          path: build
+          path: 'build/'
 
   deploy:
     name: Deploy to GitHub Pages
