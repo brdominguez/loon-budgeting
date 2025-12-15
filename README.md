@@ -23,7 +23,7 @@ This system embraces variability and uses buckets to express intent rather than 
   - Savings (end-of-month paycheck)
   - Flexible Spending (mid-month paycheck)
   - Buffer (end-of-month paycheck) - intentional cushion for variability
-- 📊 **Visual Progress Tracking**: See funding progress for each bucket
+- 📊 **Paycheck Allocation Summaries**: Quickly compare allocated totals against paycheck amounts
 - 💾 **Local Storage**: All data persists in your browser - no backend, no accounts, no tracking
 - 📱 **Responsive Design**: Works on desktop, tablet, and mobile
 - 🎨 **Clean, Modern UI**: Beautiful gradient design with intuitive controls
@@ -98,14 +98,12 @@ Click "+ Add Bucket" to create a new budget category:
 - **Category**: Choose which type of expense this is
   - The app will automatically assign it to the correct paycheck
 - **Target Amount**: How much you want to allocate to this bucket
-- **Current Amount**: How much is currently in this bucket (optional)
 - **Notes**: Add any additional context (optional)
 
-### 3. Track Your Progress
+### 3. Review Your Plan
 
-- Each bucket shows a progress bar indicating how much of the target is funded
 - The paycheck summaries show total allocated vs. remaining for each paycheck
-- Update "Current Amount" as you spend or save
+- Buckets list your targets alongside any notes you've added
 
 ### 4. Manage Buckets
 

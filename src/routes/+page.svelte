@@ -8,10 +8,9 @@
 		getCategoryLabel,
 		getCategoryPaycheck,
 		getBucketsByPaycheck,
-		calculateTotalAllocated,
-		calculateRemaining,
-		getProgressPercentage
-	} from '$lib/utils';
+                calculateTotalAllocated,
+                calculateRemaining
+        } from '$lib/utils';
 
         let state: BudgetState = {
                 buckets: [],
@@ -27,7 +26,6 @@
         let formName = '';
         let formCategory: BucketCategory = 'flexible';
         let formTargetAmount = 0;
-        let formCurrentAmount = 0;
         let formNotes = '';
 
 	onMount(() => {
@@ -63,23 +61,21 @@
 
 	function openAddBucket() {
 		editingBucket = null;
-		formName = '';
-		formCategory = 'flexible';
-		formTargetAmount = 0;
-		formCurrentAmount = 0;
-		formNotes = '';
-		showAddBucket = true;
-	}
+                formName = '';
+                formCategory = 'flexible';
+                formTargetAmount = 0;
+                formNotes = '';
+                showAddBucket = true;
+        }
 
 	function openEditBucket(bucket: Bucket) {
-		editingBucket = bucket;
-		formName = bucket.name;
-		formCategory = bucket.category;
-		formTargetAmount = bucket.targetAmount;
-		formCurrentAmount = bucket.currentAmount;
-		formNotes = bucket.notes || '';
-		showAddBucket = true;
-	}
+                editingBucket = bucket;
+                formName = bucket.name;
+                formCategory = bucket.category;
+                formTargetAmount = bucket.targetAmount;
+                formNotes = bucket.notes || '';
+                showAddBucket = true;
+        }
 
         function closeForm() {
                 showAddBucket = false;
@@ -107,23 +103,21 @@
 			if (index !== -1) {
 				state.buckets[index] = {
 					...bucketToEdit,
-					name: formName.trim(),
-					category: formCategory,
-					targetAmount: formTargetAmount,
-					currentAmount: formCurrentAmount,
-					notes: formNotes.trim() || undefined
-				};
-			}
-		} else {
-			// Add new bucket
-			const newBucket: Bucket = {
-				id: generateId(),
-				name: formName.trim(),
-				category: formCategory,
-				targetAmount: formTargetAmount,
-				currentAmount: formCurrentAmount,
-				notes: formNotes.trim() || undefined
-			};
+                                        name: formName.trim(),
+                                        category: formCategory,
+                                        targetAmount: formTargetAmount,
+                                        notes: formNotes.trim() || undefined
+                                };
+                        }
+                } else {
+                        // Add new bucket
+                        const newBucket: Bucket = {
+                                id: generateId(),
+                                name: formName.trim(),
+                                category: formCategory,
+                                targetAmount: formTargetAmount,
+                                notes: formNotes.trim() || undefined
+                        };
 			state.buckets = [...state.buckets, newBucket];
 		}
 
@@ -138,17 +132,9 @@
 		}
 	}
 
-	function updateBucketAmount(bucketId: string, amount: number) {
-                const index = state.buckets.findIndex((b: Bucket) => b.id === bucketId);
-		if (index !== -1) {
-			state.buckets[index].currentAmount = amount;
-			saveState();
-		}
-	}
-
-	const categories: BucketCategory[] = [
-		'early-bills',
-		'late-bills',
+        const categories: BucketCategory[] = [
+                'early-bills',
+                'late-bills',
 		'groceries',
 		'savings',
 		'flexible',
@@ -272,36 +258,13 @@
 											<button class="btn-icon" onclick={() => deleteBucket(bucket.id)} title="Delete">🗑️</button>
 										</div>
 									</div>
-									<div class="bucket-body">
-                                                                                <div class="amount-input">
-                                                                                        <label for={`mid-month-${bucket.id}-current`}>Current Amount:</label>
-                                                                                        <div class="input-group">
-                                                                                                <span class="currency-symbol">$</span>
-                                                                                                <input
-                                                                                                        id={`mid-month-${bucket.id}-current`}
-                                                                                                        type="number"
-                                                                                                        min="0"
-                                                                                                        step="0.01"
-													value={bucket.currentAmount}
-													oninput={(e) => updateBucketAmount(bucket.id, parseFloat(e.currentTarget.value) || 0)}
-												/>
-											</div>
-										</div>
-										<div class="target-amount">
-											<span>Target: {formatCurrency(bucket.targetAmount)}</span>
-										</div>
-										<div class="progress-bar">
-											<div
-												class="progress-fill"
-												style="width: {getProgressPercentage(bucket.currentAmount, bucket.targetAmount)}%"
-											></div>
-										</div>
-										<div class="progress-text">
-											{getProgressPercentage(bucket.currentAmount, bucket.targetAmount).toFixed(0)}% funded
-										</div>
-										{#if bucket.notes}
-											<div class="bucket-notes">{bucket.notes}</div>
-										{/if}
+                                                                        <div class="bucket-body">
+                                                                                <div class="target-amount">
+                                                                                        <span>Target: {formatCurrency(bucket.targetAmount)}</span>
+                                                                                </div>
+                                                                                {#if bucket.notes}
+                                                                                        <div class="bucket-notes">{bucket.notes}</div>
+                                                                                {/if}
 									</div>
 								</div>
 							{/each}
@@ -327,36 +290,13 @@
 											<button class="btn-icon" onclick={() => deleteBucket(bucket.id)} title="Delete">🗑️</button>
 										</div>
 									</div>
-									<div class="bucket-body">
-                                                                                <div class="amount-input">
-                                                                                        <label for={`end-month-${bucket.id}-current`}>Current Amount:</label>
-                                                                                        <div class="input-group">
-                                                                                                <span class="currency-symbol">$</span>
-                                                                                                <input
-                                                                                                        id={`end-month-${bucket.id}-current`}
-                                                                                                        type="number"
-                                                                                                        min="0"
-                                                                                                        step="0.01"
-													value={bucket.currentAmount}
-													oninput={(e) => updateBucketAmount(bucket.id, parseFloat(e.currentTarget.value) || 0)}
-												/>
-											</div>
-										</div>
-										<div class="target-amount">
-											<span>Target: {formatCurrency(bucket.targetAmount)}</span>
-										</div>
-										<div class="progress-bar">
-											<div
-												class="progress-fill"
-												style="width: {getProgressPercentage(bucket.currentAmount, bucket.targetAmount)}%"
-											></div>
-										</div>
-										<div class="progress-text">
-											{getProgressPercentage(bucket.currentAmount, bucket.targetAmount).toFixed(0)}% funded
-										</div>
-										{#if bucket.notes}
-											<div class="bucket-notes">{bucket.notes}</div>
-										{/if}
+                                                                        <div class="bucket-body">
+                                                                                <div class="target-amount">
+                                                                                        <span>Target: {formatCurrency(bucket.targetAmount)}</span>
+                                                                                </div>
+                                                                                {#if bucket.notes}
+                                                                                        <div class="bucket-notes">{bucket.notes}</div>
+                                                                                {/if}
 									</div>
 								</div>
 							{/each}
@@ -411,37 +351,23 @@
 					</small>
 				</div>
 
-				<div class="form-group">
-					<label for="bucket-target">Target Amount *</label>
-					<div class="input-group">
-						<span class="currency-symbol">$</span>
-						<input
+                                <div class="form-group">
+                                        <label for="bucket-target">Target Amount *</label>
+                                        <div class="input-group">
+                                                <span class="currency-symbol">$</span>
+                                                <input
 							id="bucket-target"
 							type="number"
 							min="0"
 							step="0.01"
 							bind:value={formTargetAmount}
 							required
-						/>
-					</div>
-				</div>
+                                                />
+                                        </div>
+                                </div>
 
-				<div class="form-group">
-					<label for="bucket-current">Current Amount</label>
-					<div class="input-group">
-						<span class="currency-symbol">$</span>
-						<input
-							id="bucket-current"
-							type="number"
-							min="0"
-							step="0.01"
-							bind:value={formCurrentAmount}
-						/>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label for="bucket-notes">Notes (optional)</label>
+                                <div class="form-group">
+                                        <label for="bucket-notes">Notes (optional)</label>
 					<textarea
 						id="bucket-notes"
 						bind:value={formNotes}
@@ -692,42 +618,16 @@
 		gap: 0.5rem;
 	}
 
-	.bucket-body {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-	}
+        .bucket-body {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+        }
 
-	.amount-input label {
-		display: block;
-		font-size: 0.9rem;
-		color: #666;
-		margin-bottom: 0.5rem;
-	}
-
-	.target-amount {
-		font-size: 0.9rem;
-		color: #666;
-	}
-
-	.progress-bar {
-		height: 8px;
-		background: #e0e0e0;
-		border-radius: 4px;
-		overflow: hidden;
-	}
-
-	.progress-fill {
-		height: 100%;
-		background: linear-gradient(90deg, #667eea, #764ba2);
-		transition: width 0.3s ease;
-	}
-
-	.progress-text {
-		font-size: 0.9rem;
-		color: #666;
-		text-align: center;
-	}
+        .target-amount {
+                font-size: 0.9rem;
+                color: #666;
+        }
 
 	.bucket-notes {
 		padding: 0.75rem;
