@@ -1,4 +1,6 @@
 # 🦆 Loon Budgeting
+[![CI](https://github.com/brdominguez/loon-budgeting/actions/workflows/ci.yml/badge.svg)](https://github.com/brdominguez/loon-budgeting/actions/workflows/ci.yml)
+[![Deploy to GitHub Pages](https://github.com/brdominguez/loon-budgeting/actions/workflows/deploy.yml/badge.svg)](https://github.com/brdominguez/loon-budgeting/actions/workflows/deploy.yml)
 
 A **frontend-only SvelteKit** personal budgeting app using a **paycheck-segmented bucket system**.
 
