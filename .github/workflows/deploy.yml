@@ -6,6 +6,9 @@ on:
       - master
   workflow_dispatch:
 
+env:
+  BASE_PATH: ${{ vars.BASE_PATH }}
+
 permissions:
   contents: read
   pages: write
