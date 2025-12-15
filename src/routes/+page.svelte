@@ -98,15 +98,16 @@
 	function saveBucket() {
 		if (!formName.trim()) return;
 
-        if (editingBucket) {
-                        // Update existing bucket
-                        const index = state.buckets.findIndex((b: Bucket) => b.id === editingBucket.id);
-                        if (index !== -1) {
-                                state.buckets[index] = {
-                                        ...editingBucket,
-                                        name: formName.trim(),
-                                        category: formCategory,
-                                        targetAmount: formTargetAmount,
+		const bucketToEdit = editingBucket;
+		if (bucketToEdit) {
+			// Update existing bucket
+			const index = state.buckets.findIndex((b: Bucket) => b.id === bucketToEdit.id);
+			if (index !== -1) {
+				state.buckets[index] = {
+					...bucketToEdit,
+					name: formName.trim(),
+					category: formCategory,
+					targetAmount: formTargetAmount,
 					currentAmount: formCurrentAmount,
 					notes: formNotes.trim() || undefined
 				};
