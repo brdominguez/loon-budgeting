@@ -3,21 +3,19 @@ import type { Bucket, BucketCategory, PaycheckType } from './types';
 import {
         calculateRemaining,
         calculateTotalAllocated,
-        calculateTotalCurrent,
         formatCurrency,
         generateId,
         getBucketsByPaycheck,
         getCategoryLabel,
-        getCategoryPaycheck,
-        getProgressPercentage
+        getCategoryPaycheck
 } from './utils';
 
 const buckets: Bucket[] = [
-        { id: '1', name: 'Rent', category: 'early-bills', targetAmount: 1200, currentAmount: 600 },
-        { id: '2', name: 'Utilities', category: 'late-bills', targetAmount: 300, currentAmount: 150 },
-        { id: '3', name: 'Groceries', category: 'groceries', targetAmount: 400, currentAmount: 200 },
-        { id: '4', name: 'Savings', category: 'savings', targetAmount: 500, currentAmount: 500 },
-        { id: '5', name: 'Fun', category: 'flexible', targetAmount: 250, currentAmount: 50 }
+        { id: '1', name: 'Rent', category: 'early-bills', targetAmount: 1200 },
+        { id: '2', name: 'Utilities', category: 'late-bills', targetAmount: 300 },
+        { id: '3', name: 'Groceries', category: 'groceries', targetAmount: 400 },
+        { id: '4', name: 'Savings', category: 'savings', targetAmount: 500 },
+        { id: '5', name: 'Fun', category: 'flexible', targetAmount: 250 }
 ];
 
 const paycheckLabels: Record<BucketCategory, PaycheckType> = {
@@ -79,21 +77,10 @@ describe('bucket calculations', () => {
                 expect(calculateTotalAllocated(buckets, 'mid-month')).toBe(550);
                 expect(calculateTotalAllocated(buckets, 'end-of-month')).toBe(2100);
         });
-
-        it('calculates current totals per paycheck', () => {
-                expect(calculateTotalCurrent(buckets, 'mid-month')).toBe(200);
-                expect(calculateTotalCurrent(buckets, 'end-of-month')).toBe(1300);
-        });
 });
 
 describe('budget math utilities', () => {
         it('calculates remaining funds', () => {
                 expect(calculateRemaining(1500, 900)).toBe(600);
-        });
-
-        it('calculates progress percentage without exceeding 100', () => {
-                expect(getProgressPercentage(50, 100)).toBe(50);
-                expect(getProgressPercentage(120, 100)).toBe(100);
-                expect(getProgressPercentage(0, 0)).toBe(0);
         });
 });

@@ -11,12 +11,11 @@ export type BucketCategory =
 	| 'buffer';          // Intentional buffer for variability
 
 export interface Bucket {
-	id: string;
-	name: string;
-	category: BucketCategory;
-	targetAmount: number;
-	currentAmount: number;
-	notes?: string;
+        id: string;
+        name: string;
+        category: BucketCategory;
+        targetAmount: number;
+        notes?: string;
 }
 
 export interface Paycheck {

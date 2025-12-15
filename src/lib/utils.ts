@@ -57,20 +57,10 @@ export function getBucketsByPaycheck(buckets: Bucket[], paycheckType: PaycheckTy
 }
 
 export function calculateTotalAllocated(buckets: Bucket[], paycheckType: PaycheckType): number {
-	return getBucketsByPaycheck(buckets, paycheckType)
-		.reduce((sum, bucket) => sum + bucket.targetAmount, 0);
-}
-
-export function calculateTotalCurrent(buckets: Bucket[], paycheckType: PaycheckType): number {
-	return getBucketsByPaycheck(buckets, paycheckType)
-		.reduce((sum, bucket) => sum + bucket.currentAmount, 0);
+        return getBucketsByPaycheck(buckets, paycheckType)
+                .reduce((sum, bucket) => sum + bucket.targetAmount, 0);
 }
 
 export function calculateRemaining(paycheckAmount: number, allocated: number): number {
-	return paycheckAmount - allocated;
-}
-
-export function getProgressPercentage(current: number, target: number): number {
-	if (target === 0) return 0;
-	return Math.min((current / target) * 100, 100);
+        return paycheckAmount - allocated;
 }
