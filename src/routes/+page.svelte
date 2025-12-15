@@ -99,13 +99,11 @@
 		if (!formName.trim()) return;
 
         if (editingBucket) {
-                        const bucketToUpdate = editingBucket;
-
                         // Update existing bucket
-                        const index = state.buckets.findIndex((b: Bucket) => b.id === bucketToUpdate.id);
+                        const index = state.buckets.findIndex((b: Bucket) => b.id === editingBucket.id);
                         if (index !== -1) {
                                 state.buckets[index] = {
-                                        ...bucketToUpdate,
+                                        ...editingBucket,
                                         name: formName.trim(),
                                         category: formCategory,
                                         targetAmount: formTargetAmount,
