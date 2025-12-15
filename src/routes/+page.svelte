@@ -259,7 +259,7 @@
                                                                                 </div>
                                                                         </div>
                                                                         <div class="tile-body">
-                                                                                <span class="target-amount">Target {formatCurrency(bucket.targetAmount)}</span>
+                                                                                <span class="target-amount">🎯 {formatCurrency(bucket.targetAmount)}</span>
                                                                                 {#if bucket.notes}
                                                                                         <div class="bucket-notes inline">{bucket.notes}</div>
                                                                                 {/if}
@@ -289,7 +289,7 @@
                                                                                 </div>
                                                                         </div>
                                                                         <div class="tile-body">
-                                                                                <span class="target-amount">Target {formatCurrency(bucket.targetAmount)}</span>
+                                                                                <span class="target-amount">🎯 {formatCurrency(bucket.targetAmount)}</span>
                                                                                 {#if bucket.notes}
                                                                                         <div class="bucket-notes inline">{bucket.notes}</div>
                                                                                 {/if}
