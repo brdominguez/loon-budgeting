@@ -87,10 +87,12 @@
         }
 
         function handleOverlayKeydown(event: KeyboardEvent) {
-                if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
+                const isOverlayTarget = event.target === event.currentTarget;
+
+                if (event.key === 'Escape') {
                         closeForm();
-                } else if (event.key === 'Escape') {
+                } else if (isOverlayTarget && (event.key === 'Enter')) {
+                        event.preventDefault();
                         closeForm();
                 }
         }
